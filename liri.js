@@ -14,7 +14,7 @@ var fs = require("fs");
 //interactions for liri
 var liriCommand = process.argv[2];
 var liriString = process.argv;
-var liriRequestedItem;
+var liriRequestedItem = "";
 
 // movie variables
 var queryURL;
@@ -24,7 +24,6 @@ var queryURL;
 //                  String Argv Together                    //
 //----------------------------------------------------------// 
 // an empty string for holding requested song or movie
-var liriRequestedItem = "";
 
 // Capture all the words in the requested item
 for (var i = 3; i < liriString.length; i++) {
@@ -34,6 +33,8 @@ for (var i = 3; i < liriString.length; i++) {
 
 
 }
+
+liriRequestedItem = liriRequestedItem.trim();
 
 //----------------------------------------------------------//
 //            Liri  Movie-This controls                     //
@@ -65,15 +66,45 @@ if(liriCommand === "movie-this"){
 	
 	//url build for request
 	queryURL = "http://www.omdbapi.com/?t="+ liriRequestedItem +"&y=&plot=short&r=json"
-	
+	console.log(queryURL)
+	console.log(liriRequestedItem)
 	// runs a request to the OMDB API
 	request(queryURL, function(error, response, body) {
 
 	  // If the request is successful
 	  if (!error && response.statusCode === 200) {
+			console.log(JSON.parse(body));
+		    
+		    // Title of the movie.
+		    console.log("The movie's title is: " + JSON.parse(body).Title);
+			
+			// Year the movie came out.
+			console.log("The movie's release year is: " + JSON.parse(body).Year);
+			
+			// IMDB Rating of the movie.
+			console.log("The movie's rating is: " + JSON.parse(body).Rated);
+			
+			// Country where the movie was produced.
+			console.log("The movie's country of production is: " + JSON.parse(body).Country);
+			
+			// Language of the movie.
+			console.log("The movie's language is: " + JSON.parse(body).Language);
+			
+			// Plot of the movie.
+			console.log("The movie's plot is: " + JSON.parse(body).Plot);
+			
+			// Actors in the movie.
+			console.log("The movie's actors are: " + JSON.parse(body).Actors);
+			
+			// Rotten Tomatoes Rating.
+			console.log("The movie's rotten tomatoes rating is: " + JSON.parse(body).imdbRating);
+			
+			// Rotten Tomatoes URL.
+			console.log("The movie's rotten tomatores URL is: " + JSON.parse(body).imdbRating);
 
-			// Parse the body of the site so its legiable 
-		    console.log("The movie's rating is: " + JSON.parse(body).imdbRating);
+
+
+
 		}
 	});
 
