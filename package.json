@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/Tasha-GitHub/Liri#readme",
   "dependencies": {
-    "omdb": "^0.7.0",
+    "request": "^2.79.0",
     "spotify": "^0.3.0",
     "twitter": "^1.4.0"
   }
