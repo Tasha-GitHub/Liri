@@ -40,24 +40,6 @@ liriRequestedItem = liriRequestedItem.trim();
 //            Liri  Movie-This controls                     //
 //----------------------------------------------------------// 
 
-// node liri.js movie-this '<movie name here>'
-
-// This will output the following information to your terminal/bash window:
-
-// Title of the movie.
-// Year the movie came out.
-// IMDB Rating of the movie.
-// Country where the movie was produced.
-// Language of the movie.
-// Plot of the movie.
-// Actors in the movie.
-// Rotten Tomatoes Rating.
-// Rotten Tomatoes URL.
-// If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
-
-// If you haven't watched "Mr. Nobody," then you should: http://www.imdb.com/title/tt0485947/
-// It's on Netflix!
-
 if(liriCommand === "movie-this"){
 	//if there is no input for lirirequested item
 	if (liriRequestedItem.length ===0 ) {
@@ -74,7 +56,7 @@ if(liriCommand === "movie-this"){
 	  // If the request is successful
 	  if (!error && response.statusCode === 200) {
 			console.log(JSON.parse(body));
-		    
+			console.log(response);
 		    // Title of the movie.
 		    console.log("The movie's title is: " + JSON.parse(body).Title);
 			
@@ -101,34 +83,49 @@ if(liriCommand === "movie-this"){
 			
 			// Rotten Tomatoes URL.
 			console.log("The movie's rotten tomatores URL is: " + JSON.parse(body).imdbRating);
-
-
-
-
 		}
 	});
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
-
 
 //----------------------------------------------------------//
 //            Liri  Spotify-This controls                   //
 //----------------------------------------------------------//
+// node liri.js spotify-this-song '<song name here>'
 
+// This will show the following information about the song in your terminal/bash window
+
+// Artist(s)
+// The song's name
+// A preview link of the song from Spotify
+// The album that the song is from
+
+if(liriCommand === "spotify-this-song"){
+	//if there is no input for lirirequested item
+	if (liriRequestedItem.length ===0 ) {
+		liriRequestedItem = "The Sign";
+	}
+
+	spotify.search({ type: 'track', query: liriRequestedItem }, function(err, data) {
+	    
+	    if ( err ) {
+	        console.log('Error occurred: ' + err);
+	        return;
+	    }
+	    
+	    console.log(JSON.stringify(data.tracks.items[0].name, null, 2));
+	    // Artist(s)
+	    console.log("The Artist of this song is " + data.tracks.items[0].album.artists[0].name)
+		
+		// The song's name
+		console.log("The name of this song is " + data.tracks.items[0].name)
+		
+		// A preview link of the song from Spotify
+		console.log("Here is a preview link of this song " + data.tracks.items[0].album.artists[0].external_urls.spotify)
+		
+		// The album that the song is from
+		console.log("The album of this song is " + data.tracks.items[0].album.name)
+	});
+}
 
 
 //----------------------------------------------------------//
