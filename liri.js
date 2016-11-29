@@ -36,53 +36,9 @@ liriRequestedItem = liriRequestedItem.trim();
 //----------------------------------------------------------//
 //            Liri  Movie-This controls                     //
 //----------------------------------------------------------// 
-
+//liri run command
 if(liriCommand === "movie-this"){
 	movieStats();
-	// //if there is no input for lirirequested item
-	// if (liriRequestedItem.length ===0 ) {
-	// 	liriRequestedItem = "Mr.Nobody";
-	// }
-	
-	// //url build for request
-	// queryURL = "http://www.omdbapi.com/?t="+ liriRequestedItem +"&y=&plot=short&r=json"
-	// console.log(queryURL)
-	// console.log(liriRequestedItem)
-	// // runs a request to the OMDB API
-	// request(queryURL, function(error, response, body) {
-
-	//   // If the request is successful
-	//   if (!error && response.statusCode === 200) {
-	// 		console.log(JSON.parse(body));
-	// 		console.log(response);
-	// 	    // Title of the movie.
-	// 	    console.log("The movie's title is: " + JSON.parse(body).Title);
-			
-	// 		// Year the movie came out.
-	// 		console.log("The movie's release year is: " + JSON.parse(body).Year);
-			
-	// 		// IMDB Rating of the movie.
-	// 		console.log("The movie's rating is: " + JSON.parse(body).Rated);
-			
-	// 		// Country where the movie was produced.
-	// 		console.log("The movie's country of production is: " + JSON.parse(body).Country);
-			
-	// 		// Language of the movie.
-	// 		console.log("The movie's language is: " + JSON.parse(body).Language);
-			
-	// 		// Plot of the movie.
-	// 		console.log("The movie's plot is: " + JSON.parse(body).Plot);
-			
-	// 		// Actors in the movie.
-	// 		console.log("The movie's actors are: " + JSON.parse(body).Actors);
-			
-	// 		// Rotten Tomatoes Rating.
-	// 		console.log("The movie's rotten tomatoes rating is: " + JSON.parse(body).imdbRating);
-			
-	// 		// Rotten Tomatoes URL.
-	// 		console.log("The movie's rotten tomatores URL is: " + JSON.parse(body).imdbRating);
-	// 	}
-	// });
 }
 
 function movieStats(){
@@ -96,41 +52,54 @@ function movieStats(){
 	// console.log(queryURL)
 	// console.log(liriRequestedItem)
 	// runs a request to the OMDB API
-	request(queryURL, function(error, response, body) {
-		if (error) {
-			console.log(error);
+	request(queryURL, function(err, response, body) {
+		if (err) {
+			console.log(err);
 		}
 
 	  // If the request is successful
-	  if (!error && response.statusCode === 200) {
+	  if (!err && response.statusCode === 200) {
 			// console.log(JSON.parse(body));
 			// console.log(response);
 		    // Title of the movie.
-		    console.log("The movie's title is: " + JSON.parse(body).Title);
+		    var title = JSON.parse(body).Title;
+		    console.log("The movie's title is: " + title);
 			
 			// Year the movie came out.
-			console.log("The movie's release year is: " + JSON.parse(body).Year);
+			var year = JSON.parse(body).Year;
+			console.log("The movie's release year is: " + year);
 			
 			// IMDB Rating of the movie.
-			console.log("The movie's rating is: " + JSON.parse(body).Rated);
+			var rating = JSON.parse(body).Rated;
+			console.log("The movie's rating is: " + rating);
 			
 			// Country where the movie was produced.
-			console.log("The movie's country of production is: " + JSON.parse(body).Country);
+			var country = JSON.parse(body).Country;
+			console.log("The movie's country of production is: " + country);
 			
 			// Language of the movie.
-			console.log("The movie's language is: " + JSON.parse(body).Language);
+			var language = JSON.parse(body).Language;
+			console.log("The movie's language is: " + language);
 			
 			// Plot of the movie.
-			console.log("The movie's plot is: " + JSON.parse(body).Plot);
+			var plot = JSON.parse(body).Plot;
+			console.log("The movie's plot is: " + plot);
 			
 			// Actors in the movie.
-			console.log("The movie's actors are: " + JSON.parse(body).Actors);
+			var actors = JSON.parse(body).Actors;
+			console.log("The movie's actors are: " + actors);
 			
 			// Rotten Tomatoes Rating.
+			var RTR = "missing";
 			console.log("The movie's rotten tomatoes rating is: " + JSON.parse(body).imdbRating);
 			
 			// Rotten Tomatoes URL.
+			var RTURL = "missing"
 			console.log("The movie's rotten tomatores URL is: " + JSON.parse(body).imdbRating);
+		
+			var logInput = title + " | " + year + " | " + rating + " | " + country+ " | " + language + " | " + plot+ " | " + actors+ " | " + RTURL+ " | " + RTR
+			logsControl(liriCommand, logInput)
+
 		}
 	});
 
@@ -139,34 +108,9 @@ function movieStats(){
 //----------------------------------------------------------//
 //            Liri  Spotify-This controls                   //
 //----------------------------------------------------------//
-
+//liri run command
 if(liriCommand === "spotify-this-song"){
 	spotifySong();
-	// //if there is no input for lirirequested item
-	// if (liriRequestedItem.length ===0 ) {
-	// 	liriRequestedItem = "The Sign";
-	// }
-
-	// spotify.search({ type: 'track', query: liriRequestedItem }, function(err, data) {
-	    
-	//     if ( err ) {
-	//         console.log('Error occurred: ' + err);
-	//         return;
-	//     }
-	    
-	//     console.log(JSON.stringify(data.tracks.items[0].name, null, 2));
-	//     // Artist(s)
-	//     console.log("The Artist of this song is " + data.tracks.items[0].album.artists[0].name)
-		
-	// 	// The song's name
-	// 	console.log("The name of this song is " + data.tracks.items[0].name)
-		
-	// 	// A preview link of the song from Spotify
-	// 	console.log("Here is a preview link of this song " + data.tracks.items[0].album.artists[0].external_urls.spotify)
-		
-	// 	// The album that the song is from
-	// 	console.log("The album of this song is " + data.tracks.items[0].album.name)
-	// });
 }
 
 function spotifySong(){
@@ -182,18 +126,26 @@ function spotifySong(){
 	        return;
 	    }
 	    
-	    console.log(JSON.stringify(data.tracks.items[0].name, null, 2));
 	    // Artist(s)
-	    console.log("The Artist of this song is " + data.tracks.items[0].album.artists[0].name)
+	    var artist = data.tracks.items[0].album.artists[0].name;
+	    console.log("The Artist of this song is " + artist)
 		
 		// The song's name
-		console.log("The name of this song is " + data.tracks.items[0].name)
+		var song = data.tracks.items[0].name;
+		console.log("The name of this song is " + song)
 		
 		// A preview link of the song from Spotify
-		console.log("Here is a preview link of this song " + data.tracks.items[0].album.artists[0].external_urls.spotify)
+		var preview = data.tracks.items[0].album.artists[0].external_urls.spotify;
+		console.log("Here is a preview link of this song " + preview)
 		
 		// The album that the song is from
-		console.log("The album of this song is " + data.tracks.items[0].album.name)
+		var album = data.tracks.items[0].album.name
+		console.log("The album of this song is " + album)
+
+		//logger.log
+		var logInput = artist + " | " + song + " | " + preview + " | " + album
+		logsControl(liriCommand, logInput)
+
 	});
 
 }
@@ -201,23 +153,22 @@ function spotifySong(){
 //----------------------------------------------------------//
 //            Liri  Twitter-This controls                   //
 //----------------------------------------------------------//
-
+//liri run command
 // if(liriCommand === "my-tweets"){
- 
-// 	// var params = {screen_name: 'nodejs'};
-// 	// keys.get('statuses/user_timeline', params, function(error, tweets, response) {
-// 	//   if (error) {
-// 	//     console.log(error);
-// 	//   }
-// 	//   console.log(tweets);
-// 	//   console.log(response);
-// 	// });
-
+// 	myTweets();
 // }
 
-function myTweets(){
+// function myTweets(){
+// 	var params = {screen_name: 'nodejs'};
+// 	keys.get('statuses/user_timeline', params, function(error, tweets, response) {
+// 	  if (error) {
+// 	  	console.log(error);
+// 	  }
+// 	  console.log(tweets);
+// 	  console.log(response);
+// 	});
 
-}
+// }
 //----------------------------------------------------------//
 //            Liri  Do-This controls                        //
 //----------------------------------------------------------//
@@ -239,4 +190,22 @@ if(liriCommand === "do-what-it-says"){
 	});
 }
 
+//----------------------------------------------------------//
+//               Liri  Logs controls                        //
+//----------------------------------------------------------//
+
+function logsControl(command, input){
+	var phrase = command + " " + ":" + " " + input
+	fs.appendFile("logs.txt", phrase , function(err) {
+	 //if an error occurs
+	  if (err) {
+	    console.log(err);
+	  }
+
+	  else {
+	    console.log("Content Added!");
+	  }
+	});
+
+}
 
