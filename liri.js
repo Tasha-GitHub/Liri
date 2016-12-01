@@ -4,12 +4,14 @@
 
 //requried NPMs
 var spotify = require("spotify");
-var twitter = require("twitter");
+var Twitter = require("twitter");
 var request = require("request");
 var fs = require("fs");
 
 //keys for twitter
 var keys = require('./keys.js');
+var twitterKeyList = keys.twitterKeys;
+// console.log(twitterKeyList)
 
 //interactions for liri
 var liriCommand = process.argv[2];
@@ -20,8 +22,9 @@ var liriRequestedItem = "";
 var queryURL;
 
 
+
 //----------------------------------------------------------//
-//                  String Argv Together                    //
+//                  String Arguments Together               //
 //----------------------------------------------------------// 
 
 // Capture all the words in the requested item
@@ -48,7 +51,7 @@ function movieStats(){
 	}
 	
 	//url build for request
-	queryURL = "http://www.omdbapi.com/?t="+ liriRequestedItem +"&y=&plot=short&r=json"
+	queryURL = "http://www.omdbapi.com/?t="+ liriRequestedItem +"&y=&plot=short&tomatoes=true&r=json"
 	// console.log(queryURL)
 	// console.log(liriRequestedItem)
 	// runs a request to the OMDB API
@@ -59,7 +62,7 @@ function movieStats(){
 
 	  // If the request is successful
 	  if (!err && response.statusCode === 200) {
-			// console.log(JSON.parse(body));
+			console.log(JSON.parse(body));
 			// console.log(response);
 		    // Title of the movie.
 		    var title = JSON.parse(body).Title;
@@ -90,14 +93,14 @@ function movieStats(){
 			console.log("The movie's actors are: " + actors);
 			
 			// Rotten Tomatoes Rating.
-			var RTR = "missing";
-			console.log("The movie's rotten tomatoes rating is: " + JSON.parse(body).imdbRating);
+			var RTR = JSON.parse(body).tomatoUserRating;
+			console.log("The movie's rotten tomatoes rating is: " + JSON.parse(body).tomatoUserRating);
 			
 			// Rotten Tomatoes URL.
-			var RTURL = "missing"
-			console.log("The movie's rotten tomatores URL is: " + JSON.parse(body).imdbRating);
+			var RTURL = JSON.parse(body).tomatoURL;
+			console.log("The movie's rotten tomatores URL is: " + JSON.parse(body).tomatoURL);
 		
-			var logInput = title + " | " + year + " | " + rating + " | " + country+ " | " + language + " | " + plot+ " | " + actors+ " | " + RTURL+ " | " + RTR
+			var logInput = "\n"+title + "\n" + year + " \n" + rating + " \n " + country+ " \n " + language + " \n" + plot+ " \n" + actors+ " \n " + RTURL+ " \n " + RTR
 			logsControl(liriCommand, logInput)
 
 		}
@@ -143,7 +146,7 @@ function spotifySong(){
 		console.log("The album of this song is " + album)
 
 		//logger.log
-		var logInput = artist + " | " + song + " | " + preview + " | " + album
+		var logInput = artist + " \n " + song + " \n" + preview + " \n " + album
 		logsControl(liriCommand, logInput)
 
 	});
@@ -154,21 +157,65 @@ function spotifySong(){
 //            Liri  Twitter-This controls                   //
 //----------------------------------------------------------//
 //liri run command
-// if(liriCommand === "my-tweets"){
-// 	myTweets();
-// }
+if(liriCommand === "my-tweets"){
+	myTweets();
+	
+}
 
-// function myTweets(){
-// 	var params = {screen_name: 'nodejs'};
-// 	keys.get('statuses/user_timeline', params, function(error, tweets, response) {
-// 	  if (error) {
-// 	  	console.log(error);
-// 	  }
-// 	  console.log(tweets);
-// 	  console.log(response);
-// 	});
 
-// }
+
+function myTweets(){
+
+	var logInput = [];
+	var userName = process.argv[3]
+
+	var client = new Twitter({
+	  consumer_key: keys.twitterKeys.consumer_key,
+	  consumer_secret: keys.twitterKeys.consumer_secret,
+	  access_token_key: keys.twitterKeys.access_token_key,
+	  access_token_secret: keys.twitterKeys.access_token_secret
+	});
+
+	var params = {screen_name: userName};
+	client.get("statuses/user_timeline", params, function(err, tweets, response) {
+	  if (err) {
+	  	console.log(err);
+	  }
+	  for(var i = 0; i < tweets.length; i++){
+	  	console.log(tweets[i].text);
+	  	logInput.push(tweets[i].text);
+		}
+		logsControl(liriCommand, logInput);
+	});
+
+}
+
+if(liriCommand === "post-tweet"){
+	updateStatus();
+}
+
+function updateStatus(){
+	var logInput = [];
+	var userTweet = liriRequestedItem;
+
+	var client = new Twitter({
+	  consumer_key: keys.twitterKeys.consumer_key,
+	  consumer_secret: keys.twitterKeys.consumer_secret,
+	  access_token_key: keys.twitterKeys.access_token_key,
+	  access_token_secret: keys.twitterKeys.access_token_secret
+	});
+
+	client.post('statuses/update', {status: userTweet}, function(err, tweet, response) {
+	 if (err) {
+	    console.log(err);
+	  }
+
+	  else {
+	    logsControl(liriCommand, userTweet);
+	  }
+	});
+
+}
 //----------------------------------------------------------//
 //            Liri  Do-This controls                        //
 //----------------------------------------------------------//
@@ -195,7 +242,7 @@ if(liriCommand === "do-what-it-says"){
 //----------------------------------------------------------//
 
 function logsControl(command, input){
-	var phrase = command + " " + ":" + " " + input
+	var phrase = "\n--------------" + "\n" + command + " " + ":" + " " + input +"\n----------------"
 	fs.appendFile("logs.txt", phrase , function(err) {
 	 //if an error occurs
 	  if (err) {
