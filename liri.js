@@ -62,7 +62,7 @@ function movieStats(){
 
 	  // If the request is successful
 	  if (!err && response.statusCode === 200) {
-			console.log(JSON.parse(body));
+			//console.log(JSON.parse(body));
 			// console.log(response);
 		    // Title of the movie.
 		    var title = JSON.parse(body).Title;
